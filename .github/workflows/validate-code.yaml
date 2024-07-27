@@ -49,7 +49,7 @@ jobs:
         # the code as a namespace package; it won't work if we scan files
         pdm run mypy -p feeph.ads1xxx
         # example scripts and tests can be scanned as files
-        if [ -n $CONTRIB_FILES ] ; then
+        if [[ -n $CONTRIB_FILES ]] ; then
           pdm run mypy $CONTRIB_FILES
         fi
   test:
