@@ -27,6 +27,9 @@ jobs:
             - test/**.py
     - name: configure Python (using PDM)
       uses: pdm-project/setup-pdm@v4
+    - name: install dependencies
+      run: |
+        pdm install
     - name: lint code (flake8)
       env:
         LIBRARY_FILES: ${{ steps.changed-files.outputs.library_all_changed_files }}
