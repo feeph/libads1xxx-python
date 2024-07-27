@@ -9,6 +9,21 @@ name: verify pull request
 on:
   push:
 
+# our tox configuration leverages pyenv to test on multiple Python versions.
+# It is unclear if we can leverage actions/setup-python@v4 to do the same.
+#
+# Even if it's possible it may be better to keep the workflows separate:
+#  - using a matrix strategy gives us a direct feedback within GHA which
+#    specific Python version failed to validate without looking at console
+#  - using a matrix strategy enables parallel execution
+#  - splitting local testing and GHA testing allows us to define different
+#    strictness levels:
+#    - local testing may leverage stricter validation tools (pylint/ruff)
+#      and/or wider range of Python versions (specific versions, future
+#      versions).
+#    - pull request tests act as a gatekeeper and define an absolute level
+#      that must be reached and maintained
+
 jobs:
   lint:
     name: lint the code
@@ -77,8 +92,10 @@ jobs:
           pip install pytest pytest-md pytest-emoji
       # https://github.com/marketplace/actions/run-pytest
       - name: perform unit tests (Python ${{ matrix.python-version }})
+        env:
+          PYTHONPATH: .
         uses: pavelzw/pytest-action@v2
         with:
           custom-arguments: '-q'
           emoji: false
-          report-title: 'Test Report'
+          report-title: 'Test Report (Python ${{ matrix.python-version }})'
