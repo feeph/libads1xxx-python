@@ -37,7 +37,7 @@ jobs:
         LIBRARY_FILES: ${{ steps.changed-files.outputs.library_all_changed_files }}
         CONTRIB_FILES: ${{ steps.changed-files.outputs.contrib_all_changed_files }}
       run: |
-        if [ -n $LIBRARY_FILES ] || [ -n $CONTRIB_FILES ]  ; then
+        if [[ -n $LIBRARY_FILES ]] || [[ -n $CONTRIB_FILES ]]  ; then
           # the GitHub editor is 127 chars wide
           pdm run flake8 --max-line-length=127 --show-source --statistics $LIBRARY_FILES $CONTRIB_FILES
         fi
