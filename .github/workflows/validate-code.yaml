@@ -1,0 +1,67 @@
+---
+#
+# If the committer has run `tox` on their local machine and fixed all
+# identified issues then this check is expected to run perfectly fine.
+#
+
+name: verify pull request
+
+on:
+  push:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout repository
+      uses: actions/checkout@v4
+    - name: identify changed files
+      uses: tj-actions/changed-files@v44
+      id: changed-files
+      with:
+        files_yaml: |
+          library:
+            - feeph/**.py
+          contrib:
+            - examples/**.py
+            - test/**.py
+    - name: configure Python (using PDM)
+      uses: pdm-project/setup-pdm@v4
+    - name: lint code (flake8)
+      env:
+        LIBRARY_FILES: ${{ steps.changed-files.outputs.library_all_changed_files }}
+        CONTRIB_FILES: ${{ steps.changed-files.outputs.contrib_all_changed_files }}
+      run: |
+        if [ -n $LIBRARY_FILES ] || [ -n $CONTRIB_FILES ]  ; then
+          # the GitHub editor is 127 chars wide
+          pdm run flake8 --max-line-length=127 --show-source --statistics $LIBRARY_FILES $CONTRIB_FILES
+        fi
+    - name: lint code (mypy)
+      env:
+        CONTRIB_FILES: ${{ steps.changed-files.outputs.contrib_all_changed_files }}
+      run: |
+        # since this is a namespace package we must instruct mypy to scan
+        # the code as a namespace package; it won't work if we scan files
+        pdm run mypy -p feeph.ads1xxx
+        # example scripts and tests can be scanned as files
+        if [ -n $CONTRIB_FILES ] ; then
+          pdm run mypy $CONTRIB_FILES
+        fi
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.10"
+          - "3.11"
+          - "3.12"
+    steps:
+    - name: checkout repository
+      uses: actions/checkout@v4
+    - name: configure Python ${{ matrix.python-version }} (using PDM)
+      uses: pdm-project/setup-pdm@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: execute unit tests
+      run: |
+        pdm run pytest
