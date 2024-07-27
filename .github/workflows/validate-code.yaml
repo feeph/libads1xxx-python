@@ -51,6 +51,8 @@ jobs:
           pdm run mypy $CONTRIB_FILES
         fi
   test:
+    # wait on linting results, makes no sense to test if the code is broken
+    needs: lint
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -65,6 +67,9 @@ jobs:
       uses: pdm-project/setup-pdm@v4
       with:
         python-version: ${{ matrix.python-version }}
+    - name: install dependencies
+      run: |
+        pdm install
     - name: execute unit tests
       run: |
         pdm run pytest
