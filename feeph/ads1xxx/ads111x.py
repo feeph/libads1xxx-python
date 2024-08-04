@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 """
-ADS111x - Ultra-Small, Low-Power, I2C-Compatible, 860-SPS, 16-Bit ADCs
-          With Internal Reference, Oscillator, and Programmable Comparator
-
-datasheet: https://www.ti.com/lit/ds/symlink/ads1115.pdf
+abstract base class for ADS1113, ADS1114 and ADS1115
 """
 
 import logging
