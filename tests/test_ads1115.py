@@ -9,6 +9,7 @@ use hardware device:
 """
 
 import os
+import time
 import unittest
 
 # modules board and busio provide no type hints
@@ -17,6 +18,7 @@ import busio  # type: ignore
 from feeph.i2c import BurstHandler, EmulatedI2C
 
 import feeph.ads1xxx as sut  # sytem under test
+from feeph.ads1xxx.ads1115 import DEFAULTS
 
 if os.environ.get('TEST_ADS1115_CHIP', 'n') == 'y':
     HAS_HARDWARE = True
@@ -31,27 +33,37 @@ class TestAds1115(unittest.TestCase):
         if HAS_HARDWARE:
             self.i2c_bus = busio.I2C(scl=board.SCL, sda=board.SDA)
         else:
-            registers = {(register, 0x0000) for register in range(4)}
-            self.i2c_bus = EmulatedI2C(state={self.i2c_adr: registers})
+            state = {
+                self.i2c_adr: {
+                    0x00: 0x0000,
+                    0x01: 0x0000,
+                    0x02: 0x0000,
+                    0x03: 0x0000,
+                }
+            }
+            state[self.i2c_adr].update(DEFAULTS)
+            self.i2c_bus = EmulatedI2C(state=state)
         self.ads1115 = sut.Ads1115(i2c_bus=self.i2c_bus)
+
+    def tearDown(self):
         # restore original state after each run
         # (hardware is not stateless)
         self.ads1115.reset_device_registers()
 
-    def tearDown(self):
-        # nothing to do
-        pass
-
-    # ---------------------------------------------------------------------
-    # circuit-dependent settings
     # ---------------------------------------------------------------------
 
     def test_default_config(self):
+        with BurstHandler(i2c_bus=self.i2c_bus, i2c_adr=self.i2c_adr) as bh:
+            bh.write_register(0x01, 0x0083, byte_count=2)
+            bh.write_register(0x02, 0xA000, byte_count=2)
+            bh.write_register(0x03, 0x5FFF, byte_count=2)
+        # -----------------------------------------------------------------
         self.ads1115.reset_device_registers()
+        time.sleep(0.001)  # wait for single-shot conversion to finish
         # -----------------------------------------------------------------
         with BurstHandler(i2c_bus=self.i2c_bus, i2c_adr=self.i2c_adr) as bh:
-            self.assertEqual(bh.read_register(0x00, byte_count=2), 0x0000)
-            self.assertEqual(bh.read_register(0x01, byte_count=2), 0x0000)
-            self.assertEqual(bh.read_register(0x02, byte_count=2), 0x0000)
-            self.assertEqual(bh.read_register(0x03, byte_count=2), 0x0000)
-        # -----------------------------------------------------------------
+            # single-shot conversion completed (0x8583) or in progress (0x0583)
+            self.assertIn(bh.read_register(0x01, byte_count=2), [0x8583, 0x0583])
+            # threshold range: -32768 (0x8000) ≤ x ≤ 32767 (0x7FFF)
+            self.assertEqual(bh.read_register(0x02, byte_count=2), 0x8000)
+            self.assertEqual(bh.read_register(0x03, byte_count=2), 0x7FFF)

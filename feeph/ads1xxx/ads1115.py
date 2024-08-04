@@ -37,26 +37,18 @@ class Ads1115Config:
     # fmt: on
 
 
-DEFAULT_CONFIG = Ads1115Config(
-    # fmt: off
-    OSSA     = 0b1000_0000_0000_0000,  # noqa: E251  start single-shot conversion
-    IMUX     = 0b0000_0000_0000_0000,  # noqa: E251  AINp = AIN0, AINn = AIN1
-    PGA      = 0b0000_0100_0000_0000,  # noqa: E251  ±2.048V
-    MODE     = 0b0000_0001_0000_0000,  # noqa: E251  single-shot mode
-    DR       = 0b0000_0000_1000_0000,  # noqa: E251  128 samples per second
-    COMP_MOD = 0b0000_0000_0000_0000,  # noqa: E251  traditional
-    COMP_POL = 0b0000_0000_0000_0000,  # noqa: E251  active low
-    COMP_LAT = 0b0000_0000_0000_0000,  # noqa: E251  non-latching
-    COMP_QUE = 0b0000_0000_0000_0011,  # noqa: E251  disable comparator
-    # fmt: on
-)
+DEFAULTS = {
+    0x01: 0x8583,
+    0x02: 0x8000,
+    0x03: 0x7FFF,
+}
 
 
 class Ads1115(Ads111x):
-    # 0x00 - conversion register (2 bytes, default: 0x0000)
-    # 0x01 - config register     (2 bytes, default: 0x8385)
-    # 0x10 - lo_thresh register  (2 bytes, default: 0x0080)
-    # 0x11 - hi_thresh register  (2 bytes, default: 0xFF7F)
+    # 0x00 - conversion register (2 bytes, ro, default: 0x0000)
+    # 0x01 - config register     (2 bytes, rw, default: 0x8583)
+    # 0x10 - lo_thresh register  (2 bytes, rw, default: 0x0080)
+    # 0x11 - hi_thresh register  (2 bytes, rw, default: 0xFF7F)
 
     def __init__(self, i2c_bus: busio.I2C):
         self._i2c_bus = i2c_bus
@@ -94,10 +86,8 @@ class Ads1115(Ads111x):
 
     def reset_device_registers(self):
         with BurstHandler(i2c_bus=self._i2c_bus, i2c_adr=self._i2c_adr) as bh:
-            bh.write_register(0x00, 0x0000, byte_count=2)
-            bh.write_register(0x01, 0x8583, byte_count=2)
-            bh.write_register(0x10, 0x8000, byte_count=2)
-            bh.write_register(0x11, 0x7FFF, byte_count=2)
+            for register, value in DEFAULTS.items():
+                bh.write_register(register, value, byte_count=2)
 
     # ---------------------------------------------------------------------
 
