@@ -17,3 +17,7 @@ class Ads111x(ABC):
     @abstractmethod
     def get_measurement(self) -> int:
         ...
+
+    @abstractmethod
+    def reset_device_registers(self):
+        ...
