@@ -77,7 +77,7 @@ class Ads1115(Ads111x):
         value &= config.PGA
         value &= config.MODE
         value &= config.DR
-        value &= config.COMP_MODE
+        value &= config.COMP_MOD
         value &= config.COMP_POL
         value &= config.COMP_LAT
         value &= config.COMP_QUE
