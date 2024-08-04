@@ -79,18 +79,18 @@ class Ads1115(Ads111x):
         return Ads1115Config(**params)
 
     def set_config(self, config: Ads1115Config):
-        config = 0b0000_0000_0000_0000
-        config &= config.OSSA
-        config &= config.IMUX
-        config &= config.PGA
-        config &= config.MODE
-        config &= config.DR
-        config &= config.COMP_MODE
-        config &= config.COMP_POL
-        config &= config.COMP_LAT
-        config &= config.COMP_QUE
+        value = 0b0000_0000_0000_0000
+        value &= config.OSSA
+        value &= config.IMUX
+        value &= config.PGA
+        value &= config.MODE
+        value &= config.DR
+        value &= config.COMP_MODE
+        value &= config.COMP_POL
+        value &= config.COMP_LAT
+        value &= config.COMP_QUE
         with BurstHandler(i2c_bus=self._i2c_bus, i2c_adr=self._i2c_adr) as bh:
-            bh.write_register(0x01, config, byte_count=2)
+            bh.write_register(0x01, value, byte_count=2)
 
     def reset_device_registers(self):
         with BurstHandler(i2c_bus=self._i2c_bus, i2c_adr=self._i2c_adr) as bh:
