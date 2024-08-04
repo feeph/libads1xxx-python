@@ -18,5 +18,5 @@ class Ads111x(ABC):
     """
 
     @abstractmethod
-    def get_measurement() -> int:
+    def get_measurement(self) -> int:
         ...
