@@ -27,7 +27,7 @@ class Ads1115Config:
     # fmt: off
     OSSA:     int  # 0b#..._...._...._.... status or single shot start
     IMUX:     int  # 0b.###_...._...._.... input multiplexer configuration
-    PGA:      int  # 0b...._###._...._.... progrmmable gain amplifier
+    PGA:      int  # 0b...._###._...._.... programmable gain amplifier
     MODE:     int  # 0b...._...#_...._.... operating mode
     DR:       int  # 0b...._...._###._.... data rate
     COMP_MOD: int  # 0b...._...._...#_.... comparator mode
