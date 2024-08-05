@@ -72,6 +72,15 @@ class TestAds1115(unittest.TestCase):
         # -----------------------------------------------------------------
         self.assertEqual(expected, computed)
 
+    @unittest.skipIf(HAS_HARDWARE, "unpredictable result on real hardware")
+    def test_singleshot_measurement_in_microvolts(self):
+        self.i2c_bus._state[0x48][0x00] = 0x0001
+        # -----------------------------------------------------------------
+        computed = self.ads1115.get_singleshot_measurement()
+        expected = 63  # microvolts
+        # -----------------------------------------------------------------
+        self.assertEqual(expected, computed)
+
     def test_singleshot_measurement_with_config(self):
         config = sut.Ads1115Config(mux=sut.MUX.MODE1)
         self.ads1115.get_singleshot_measurement(config=config)
