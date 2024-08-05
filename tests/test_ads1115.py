@@ -62,7 +62,7 @@ class TestAds1115(unittest.TestCase):
             self.assertEqual(bh.read_register(0x02, byte_count=2), 0x8000)
             self.assertEqual(bh.read_register(0x03, byte_count=2), 0x7FFF)
 
-    @unittest.skipIf(HAS_HARDWARE == 'N', "unpredictable on real hardware")
+    @unittest.skipIf(HAS_HARDWARE, "unpredictable result on real hardware")
     def test_singleshot_measurement_default(self):
         self.i2c_bus._state[0x48][0x00] = 0x1234
         # -----------------------------------------------------------------
