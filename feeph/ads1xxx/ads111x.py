@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 
 from attrs import define
 
+from feeph.ads1xxx.conversions import UNIT
 from feeph.ads1xxx.settings import CLAT, CMOD, CPOL, CQUE, DOM, DRS, MUX, PGA, SSC
 
 
@@ -43,5 +44,5 @@ class Ads111x(ABC):
         ...
 
     @abstractmethod
-    def get_singleshot_measurement(self, config: Ads111xConfig | None) -> int:
+    def get_singleshot_measurement(self, config: Ads111xConfig | None, unit: UNIT = UNIT.MICRO) -> int:
         ...

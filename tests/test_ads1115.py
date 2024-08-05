@@ -18,6 +18,7 @@ from feeph.i2c import BurstHandler, EmulatedI2C
 
 import feeph.ads1xxx as sut  # sytem under test
 from feeph.ads1xxx.ads1115 import DEFAULTS
+from feeph.ads1xxx.conversions import UNIT
 
 if os.environ.get('TEST_ADS1115_CHIP', 'n') == 'y':
     HAS_HARDWARE = True
@@ -66,7 +67,7 @@ class TestAds1115(unittest.TestCase):
     def test_singleshot_measurement_default(self):
         self.i2c_bus._state[0x48][0x00] = 0x1234
         # -----------------------------------------------------------------
-        computed = self.ads1115.get_singleshot_measurement()
+        computed = self.ads1115.get_singleshot_measurement(unit=UNIT.STEPS)
         expected = 0x1234
         # -----------------------------------------------------------------
         self.assertEqual(expected, computed)

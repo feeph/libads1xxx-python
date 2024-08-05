@@ -14,6 +14,7 @@ from attrs import define
 from feeph.i2c import BurstHandler
 
 from feeph.ads1xxx.ads111x import Ads111x, Ads111xConfig
+from feeph.ads1xxx.conversions import UNIT, convert_step_to_microvolts
 from feeph.ads1xxx.settings import CLAT, CMOD, CPOL, CQUE, DOM, MUX, PGA, SSC
 
 LH = logging.getLogger('feeph.ads1xxx')
@@ -69,7 +70,7 @@ class Ads1115(Ads111x):
                     continue
                 bh.write_register(register, value, byte_count=2)
 
-    def get_singleshot_measurement(self, config: Ads111xConfig | Ads1115Config | None = None) -> int:
+    def get_singleshot_measurement(self, config: Ads111xConfig | Ads1115Config | None = None, unit: UNIT = UNIT.MICRO) -> int:
         with BurstHandler(i2c_bus=self._i2c_bus, i2c_adr=self._i2c_adr) as bh:
             if config is None:
                 config_uint = bh.read_register(0x01, byte_count=2)
@@ -79,6 +80,16 @@ class Ads1115(Ads111x):
                 bh.write_register(0x01, config_uint | SSC.START.value, byte_count=2)
                 # TODO wait until measurement is ready
                 # (0b0..._...._...._.... -> 0b1..._...._...._....)
-                return bh.read_register(0x00, byte_count=2)
+                step = bh.read_register(0x00, byte_count=2)
+                if unit == UNIT.MICRO:
+                    if isinstance(config, Ads1115):
+                        # ADS1114 and ADS1115 have a programmable gain
+                        # amplifier
+                        return convert_step_to_microvolts(step, config.pga)
+                    else:
+                        # ADS1113 has a fixed voltage range of ±2.048V
+                        return convert_step_to_microvolts(step, PGA.MODE2)
+                else:
+                    return step
             else:
                 raise RuntimeError("device is configured for continuous conversion")
