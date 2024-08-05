@@ -44,5 +44,5 @@ class Ads111x(ABC):
         ...
 
     @abstractmethod
-    def get_singleshot_measurement(self, config: Ads111xConfig | None, unit: UNIT = UNIT.MICRO) -> int:
+    def get_singleshot_measurement(self, config: Ads111xConfig | None = None, unit: UNIT = UNIT.MICRO) -> int:
         ...
