@@ -3,14 +3,14 @@
 import unittest
 
 import feeph.ads1xxx as sut  # sytem under test
-from feeph.ads1xxx.settings import CLAT, CMOD, CPOL, CQUE, DOM, DRS, MUX, PGA, SSC
+from feeph.ads1xxx.settings import CLAT, CMOD, CPOL, CQUE, DOM, DRS, PGA, SSC
 
 
-class TestAds1115Config(unittest.TestCase):
+class TestAds1114Config(unittest.TestCase):
 
     def test_default_config(self):
         # -----------------------------------------------------------------
-        computed = sut.Ads1115Config().as_uint16()
+        computed = sut.Ads1114Config().as_uint16()
         expected = 0x0583
         # -----------------------------------------------------------------
         self.assertEqual(expected, computed)
@@ -114,25 +114,5 @@ class TestAds1115Config(unittest.TestCase):
         }
         for mode, config_uint16 in values.items():
             computed = sut.Ads1115Config(cque=mode).as_uint16()
-            expected = config_uint16
-            self.assertEqual(computed, expected)
-
-    # ---------------------------------------------------------------------
-    # ADS1115
-    # ---------------------------------------------------------------------
-
-    def test_input_multiplexer(self):
-        values = {
-            MUX.MODE0: 0x0583,
-            MUX.MODE1: 0x1583,
-            MUX.MODE2: 0x2583,
-            MUX.MODE3: 0x3583,
-            MUX.MODE4: 0x4583,
-            MUX.MODE5: 0x5583,
-            MUX.MODE6: 0x6583,
-            MUX.MODE7: 0x7583,
-        }
-        for mode, config_uint16 in values.items():
-            computed = sut.Ads1115Config(mux=mode).as_uint16()
             expected = config_uint16
             self.assertEqual(computed, expected)
