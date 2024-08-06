@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/feeph/libads1xxx-python/compare/v0.1.0...v0.2.0) (2024-08-06)
+
+
+### Features
+
+* implement single-shot measurements ([#6](https://github.com/feeph/libads1xxx-python/issues/6)) ([ba27e50](https://github.com/feeph/libads1xxx-python/commit/ba27e50216df31d90dd6ae0f7f7ee6acf0b7f74a))
+
 ## 0.1.0 (2024-08-04)
 
 
