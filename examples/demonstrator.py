@@ -9,27 +9,30 @@ usage:
 
 import argparse
 import logging
-import sys
+
+# modules board and busio provide no type hints
+import board  # type: ignore
+import busio  # type: ignore
 
 import feeph.ads1xxx
 
-LH = logging.getLogger("app")
+LH = logging.getLogger("main")
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(levelname).1s: %(message)s', level=logging.INFO)
 
     parser = argparse.ArgumentParser(prog="demonstrator", description="demonstrate usage")
-    parser.add_argument("-i", "--input-value", type=int, default=1)
     parser.add_argument("-v", "--verbose", action="store_true")
     args = parser.parse_args()
 
     if args.verbose:
         LH.setLevel(level=logging.DEBUG)
 
-    LH.debug("start")
+    i2c_bus = busio.I2C(scl=board.SCL, sda=board.SDA)
+    ads1115 = feeph.ads1xxx.Ads1115(i2c_bus=i2c_bus)
 
-    value = feeph.ads1xxx.function1(args.input_value)
-    LH.info("Provided value: %d", value)
+    # we don't know what was previously configured, let's reset
+    ads1115.reset_device_registers()
 
-    LH.debug("exit")
-    sys.exit(0)
+    # take a single-shot measurement
+    LH.info("measurement: %0.6fV", ads1115.get_singleshot_measurement() / (1000 * 1000))
