@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-ADS1113 - Ultra-Small, Low-Power, I2C-Compatible, 860-SPS, 16-Bit ADCs
+ADS1013 - Ultra-Small, Low-Power, I2C-Compatible, 3.3-kSPS, 12-Bit ADCs
           With Internal Reference, Oscillator
 
-datasheet: https://www.ti.com/lit/ds/symlink/ads1113.pdf
+datasheet: https://www.ti.com/lit/ds/symlink/ads1013.pdf
 """
 
 import logging
@@ -18,7 +18,7 @@ LH = logging.getLogger('feeph.ads1xxx')
 
 
 @define
-class Ads1113Config(Ads1x1xConfig):
+class Ads1013Config(Ads1x1xConfig):
     # fmt: off
     ssc: SSC = SSC.NO_OP  # single-shot conversion trigger
     dom: DOM = DOM.SSM    # device operation mode
@@ -49,5 +49,5 @@ class Ads1113Config(Ads1x1xConfig):
         return convert_step_to_value(step=0x7FFF, unit=unit, pga=PGA.MODE2)
 
 
-class Ads1113(Ads1x1x):
+class Ads1013(Ads1x1x):
     _has_pga = False

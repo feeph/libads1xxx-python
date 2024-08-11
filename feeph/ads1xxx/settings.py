@@ -59,14 +59,15 @@ class DRS(Enum):
     """
     data rate setting (config[5:7])
     ```
-    DRS.MODE0 ->   8 samples per second
-    DRS.MODE1 ->  16 samples per second
-    DRS.MODE2 ->  32 samples per second
-    DRS.MODE3 ->  64 samples per second
-    DRS.MODE4 -> 128 samples per second
-    DRS.MODE5 -> 250 samples per second
-    DRS.MODE6 -> 475 samples per second
-    DRS.MODE7 -> 860 samples per second
+                 ADS101x ADS111x
+    DRS.MODE0 ->      8     128 samples per second
+    DRS.MODE1 ->     16     250 samples per second
+    DRS.MODE2 ->     32     490 samples per second
+    DRS.MODE3 ->     64     920 samples per second
+    DRS.MODE4 ->    128    1600 samples per second
+    DRS.MODE5 ->    250    2400 samples per second
+    DRS.MODE6 ->    475    3300 samples per second
+    DRS.MODE7 ->    860    3300 samples per second
     ```
     """
     MODE0 = 0b0000_0000_0000_0000
@@ -94,18 +95,15 @@ class DOM(Enum):
 class PGA(Enum):
     """
     programmable gain amplifier (config[9:11])
-
-    This parameter expresses the full-scale range of the ADC scaling.
-    Do NOT apply more than VDD +0.3V to the analog inputs of the device!
     ```
-    PGA.MODE0 -> FSR = ±6.144 V
-    PGA.MODE1 -> FSR = ±4.096 V
-    PGA.MODE2 -> FSR = ±2.048 V
-    PGA.MODE3 -> FSR = ±1.024 V
-    PGA.MODE4 -> FSR = ±0.512 V
-    PGA.MODE5 -> FSR = ±0.256 V
-    PGA.MODE6 -> FSR = ±0.256 V
-    PGA.MODE7 -> FSR = ±0.256 V
+    PGA.MODE0 -> FSR: ±6.144 V @   3mV (Vdd: 5.9 ≤ x ≤ 7.0)
+    PGA.MODE1 -> FSR: ±4.096 V @   2mV (Vdd: 3.8 ≤ x ≤ 7.0)
+    PGA.MODE2 -> FSR: ±2.048 V @   1mV
+    PGA.MODE3 -> FSR: ±1.024 V @ 500µV
+    PGA.MODE4 -> FSR: ±0.512 V @ 250µV
+    PGA.MODE5 -> FSR: ±0.256 V @ 125µV
+    PGA.MODE6 -> FSR: ±0.256 V @ 125µV
+    PGA.MODE7 -> FSR: ±0.256 V @ 125µV
     ```
     """
     MODE0 = 0b0000_0000_0000_0000

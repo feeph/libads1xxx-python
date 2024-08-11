@@ -3,6 +3,7 @@
 import unittest
 
 import feeph.ads1xxx as sut  # sytem under test
+from feeph.ads1xxx.conversions import UNIT
 from feeph.ads1xxx.settings import CLAT, CMOD, CPOL, CQUE, DOM, DRS, MUX, PGA, SSC
 
 
@@ -116,6 +117,64 @@ class TestAds1115Config(unittest.TestCase):
             computed = sut.Ads1115Config(cque=mode).as_uint16()
             expected = config_uint16
             self.assertEqual(computed, expected)
+
+    def test_get_atlo_as_steps(self):
+        computed = sut.Ads1115Config(atlo=0x9FFF).get_atlo(unit=UNIT.STEPS)
+        expected = 0x9FFF
+        self.assertEqual(computed, expected)
+
+    def test_get_atlo_as_microvolts(self):
+        computed = sut.Ads1115Config(atlo=0x9FFF).get_atlo(unit=UNIT.MICRO)
+        expected = -1536109
+        self.assertEqual(computed, expected)
+
+    def test_set_atlo_using_steps(self):
+        config = sut.Ads1115Config()
+        config.set_atlo(0x9FFF, unit=UNIT.STEPS)
+        computed = config.get_atlo()
+        expected = -1536109
+        self.assertEqual(computed, expected)
+
+    def test_set_atlo_using_steps_oor(self):
+        computed = sut.Ads1115Config().set_atlo(0xFFFFFF, unit=UNIT.STEPS)
+        expected = False
+        self.assertEqual(computed, expected)
+
+    def test_set_atlo_using_microvolts(self):
+        config = sut.Ads1115Config()
+        config.set_atlo(-1536109, unit=UNIT.MICRO)
+        computed = config.get_atlo()
+        expected = -1536109
+        self.assertEqual(computed, expected)
+
+    def test_get_athi_as_steps(self):
+        computed = sut.Ads1115Config(atlo=0x6000).get_atlo(unit=UNIT.STEPS)
+        expected = 0x6000
+        self.assertEqual(computed, expected)
+
+    def test_get_athi_as_microvolts(self):
+        computed = sut.Ads1115Config(atlo=0x6000).get_atlo(unit=UNIT.MICRO)
+        expected = 1536047
+        self.assertEqual(computed, expected)
+
+    def test_set_athi_using_steps(self):
+        config = sut.Ads1115Config()
+        config.set_athi(0x6000, unit=UNIT.STEPS)
+        computed = config.get_athi()
+        expected = 1536047
+        self.assertEqual(computed, expected)
+
+    def test_set_athi_using_steps_oor(self):
+        computed = sut.Ads1115Config().set_athi(0xFFFFFF, unit=UNIT.STEPS)
+        expected = False
+        self.assertEqual(computed, expected)
+
+    def test_set_athi_using_microvolts(self):
+        config = sut.Ads1115Config()
+        config.set_athi(1536047, unit=UNIT.MICRO)
+        computed = config.get_athi()
+        expected = 1536047
+        self.assertEqual(computed, expected)
 
     # ---------------------------------------------------------------------
     # ADS1115

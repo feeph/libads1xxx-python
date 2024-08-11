@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-ADS1115 - Ultra-Small, Low-Power, I2C-Compatible, 860-SPS, 16-Bit ADCs
+ADS1015 - Ultra-Small, Low-Power, I2C-Compatible, 3.3-kSPS, 12-Bit ADCs
           With Internal Reference, Oscillator, and Programmable Comparator
 
-datasheet: https://www.ti.com/lit/ds/symlink/ads1115.pdf
+datasheet: https://www.ti.com/lit/ds/symlink/ads1015.pdf
 """
 
 import logging
@@ -18,7 +18,7 @@ LH = logging.getLogger('feeph.ads1xxx')
 
 
 @define
-class Ads1115Config(Ads1x1xConfig):
+class Ads1015Config(Ads1x1xConfig):
     # fmt: off
     ssc:  SSC = SSC.NO_OP   # single-shot conversion trigger
     mux:  MUX  = MUX.MODE0  # input multiplexer
@@ -75,5 +75,5 @@ DEFAULTS = {
 }
 
 
-class Ads1115(Ads1x1x):
+class Ads1015(Ads1x1x):
     _has_pga = True
