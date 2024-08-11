@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.2](https://github.com/feeph/libads1xxx-python/compare/v0.3.1...v0.3.2) (2024-08-11)
+
+
+### Bug Fixes
+
+* fix example scripts and related issues ([#13](https://github.com/feeph/libads1xxx-python/issues/13)) ([533bf3e](https://github.com/feeph/libads1xxx-python/commit/533bf3ed6be9a32e4fe3f0054026e78994de2919))
+
 ## [0.3.1](https://github.com/feeph/libads1xxx-python/compare/v0.3.0...v0.3.1) (2024-08-11)
 
 
