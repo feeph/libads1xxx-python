@@ -2,7 +2,7 @@
 """
 configure the comparator
 
-The ADS1014 and ADS1014 feature a programmable digital comparator that can
+The ADS1x14 and ADS1x15 feature a programmable digital comparator that can
 issue an alert on the ALERT/RDY pin if the low or high threshold values are
 exceeded. Together with continuous-conversion mode this feature can be used
 to trigger a hardware interrupt and alert on abnormal conditions.

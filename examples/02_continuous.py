@@ -7,7 +7,7 @@ the input signal as soon as the previous conversion is completed. The rate
 of continuous conversion is equal to the programmed data rate. Data can be
 read at any time and always reflect the most recent completed conversion.
 
-The ADS1014 and ADS1014 feature a programmable digital comparator that can
+The ADS1x14 and ADS1x15 feature a programmable digital comparator that can
 issue an alert on the ALERT/RDY pin if the low or high threshold values are
 exceeded. Together with continuous-conversion mode this feature can be used
 to trigger a hardware interrupt and alert on abnormal conditions.
