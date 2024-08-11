@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/feeph/libads1xxx-python/compare/v0.3.0...v0.3.1) (2024-08-11)
+
+
+### Documentation
+
+* indicate correct chip types ([#11](https://github.com/feeph/libads1xxx-python/issues/11)) ([7795255](https://github.com/feeph/libads1xxx-python/commit/7795255049407476d65a8c3cbe588af3291c058a))
+
 ## [0.3.0](https://github.com/feeph/libads1xxx-python/compare/v0.2.0...v0.3.0) (2024-08-11)
 
 
