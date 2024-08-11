@@ -67,11 +67,17 @@ class Ads1x1x:
                     continue
                 bh.write_register(register, value, byte_count=2)
 
-    def configure(self, config: Ads1x1xConfig):
+    def configure(self, config: Ads1x1xConfig) -> bool:
+        # order is important!
         with BurstHandler(i2c_bus=self._i2c_bus, i2c_adr=self._i2c_adr) as bh:
-            bh.write_register(0x01, config.as_uint16(), byte_count=2)
+            # 1) reset to a defined state and disable alerting
+            bh.write_register(0x01, 0x0583, byte_count=2)
+            # 2) configure thresholds
             bh.write_register(0x10, config.get_atlo(unit=UNIT.STEPS), byte_count=2)
             bh.write_register(0x11, config.get_athi(unit=UNIT.STEPS), byte_count=2)
+            # 3) update config register
+            bh.write_register(0x01, config.as_uint16(), byte_count=2)
+        return True
 
     def get_ssc_measurement(self, config: Ads1x1xConfig | None = None, unit: UNIT = UNIT.MICRO) -> int:
         with BurstHandler(i2c_bus=self._i2c_bus, i2c_adr=self._i2c_adr) as bh:
@@ -84,11 +90,15 @@ class Ads1x1x:
                 config_atlo = config.get_atlo(unit=UNIT.STEPS)
                 config_athi = config.get_athi(unit=UNIT.STEPS)
             if config_uint & DOM.SSM.value:
-                bh.write_register(0x01, config_uint | SSC.START.value, byte_count=2)
+                # 1) reset to a defined state and disable alerting
+                bh.write_register(0x01, 0x0583, byte_count=2)
+                # 2) configure thresholds
                 if config_atlo is not None:
                     bh.write_register(0x10, config_atlo, byte_count=2)
                 if config_athi is not None:
                     bh.write_register(0x11, config_athi, byte_count=2)
+                # 3) update config register
+                bh.write_register(0x01, config_uint | SSC.START.value, byte_count=2)
                 # TODO wait until measurement is ready
                 # (0b0..._...._...._.... -> 0b1..._...._...._....)
                 step = bh.read_register(0x00, byte_count=2)
