@@ -96,7 +96,6 @@ class Ads1x1x:
                     if self._has_pga:
                         pga_setting = config_uint & 0b0000_1110_0000_0000
                         for pga_mode in PGA:
-                            LH.warning("get_ssc_measurement(): %s -> %d", pga_mode.name, pga_mode.value)
                             if pga_setting == pga_mode.value:
                                 return convert_step_to_microvolts(step, pga_mode)
                         else:
