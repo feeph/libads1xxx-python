@@ -19,7 +19,7 @@
 
 [project]
 name = "feeph.ads1xxx"
-version = "0.3.0"
+version = "0.3.1"
 description = "library for the ADS1xxx family of I²C analog-to-digital converters"
 authors = [
     {name = "Feeph Aifeimei", email = "55798703+feeph@users.noreply.github.com"},
