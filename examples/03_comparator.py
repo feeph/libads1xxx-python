@@ -16,6 +16,7 @@ usage:
   pdm run examples/03_comparator.py
 """
 
+import logging
 import time
 
 import board  # type: ignore
@@ -25,7 +26,11 @@ import busio  # type: ignore
 
 from feeph.ads1xxx import DOM, DRS, Ads1114, Ads1114Config
 
+LH = logging.getLogger("main")
+
 if __name__ == '__main__':
+    logging.basicConfig(format='%(levelname).1s: %(message)s', level=logging.INFO)
+
     i2c_bus = busio.I2C(scl=board.SCL, sda=board.SDA)
     ads1x14 = Ads1114(i2c_bus=i2c_bus)
 
@@ -40,7 +45,7 @@ if __name__ == '__main__':
             # on an ADS111x in MODE2 there should be a new sample
             # every 0.5 seconds (ADS101x is much faster)
             value = ads1x14.get_ccm_measurement()
-            print("value: {value1}µV")
+            print(f"value: {value}µV")
             time.sleep(0.5)
     else:
         print("Unable to configure ADC.")
