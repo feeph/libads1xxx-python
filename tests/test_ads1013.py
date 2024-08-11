@@ -122,9 +122,15 @@ class TestAds1013(unittest.TestCase):
 
     # ---------------------------------------------------------------------
 
+    def test_configure_verify_return_value(self):
+        config = sut.Ads1013Config(dom=sut.DOM.CCM)
+        # -----------------------------------------------------------------
+        # -----------------------------------------------------------------
+        self.assertTrue(self.ads1013.configure(config=config))
+
     def test_configure(self):
         config = sut.Ads1013Config(dom=sut.DOM.CCM)
-        self.ads1013.configure(config=config)
+        self.assertTrue(self.ads1013.configure(config=config))
         # -----------------------------------------------------------------
         # -----------------------------------------------------------------
         with BurstHandler(i2c_bus=self.i2c_bus, i2c_adr=self.i2c_adr) as bh:

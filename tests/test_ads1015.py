@@ -122,6 +122,12 @@ class TestAds1015(unittest.TestCase):
 
     # ---------------------------------------------------------------------
 
+    def test_configure_verify_return_value(self):
+        config = sut.Ads1015Config(dom=sut.DOM.CCM)
+        # -----------------------------------------------------------------
+        # -----------------------------------------------------------------
+        self.assertTrue(self.ads1015.configure(config=config))
+
     def test_configure(self):
         config = sut.Ads1015Config(dom=sut.DOM.CCM)
         config.set_atlo(0xA000, unit=UNIT.STEPS)
