@@ -10,6 +10,8 @@ usage:
   pdm run examples/04_amplifier.py
 """
 
+import logging
+
 import board  # type: ignore
 
 # module busio and board provide no type hints
@@ -17,7 +19,11 @@ import busio  # type: ignore
 
 from feeph.ads1xxx import PGA, Ads1114, Ads1114Config
 
+LH = logging.getLogger("main")
+
 if __name__ == '__main__':
+    logging.basicConfig(format='%(levelname).1s: %(message)s', level=logging.INFO)
+
     i2c_bus = busio.I2C(scl=board.SCL, sda=board.SDA)
     ads1x14 = Ads1114(i2c_bus=i2c_bus)
 
@@ -30,6 +36,6 @@ if __name__ == '__main__':
     config2 = Ads1114Config(pga=PGA.MODE4)  # FSR = ±0.512V
 
     value1 = ads1x14.get_ssc_measurement(config=config1)
-    print("value1: {value1}µV")  # 63µV resolution
+    print(f"value1: {value1}µV")  # 63µV resolution
     value2 = ads1x14.get_ssc_measurement(config=config2)
-    print("value2: {value2}µV")  # 16µV resolution
+    print(f"value2: {value2}µV")  # 16µV resolution

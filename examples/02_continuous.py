@@ -21,6 +21,7 @@ usage:
   pdm run examples/02_continuous.py
 """
 
+import logging
 import time
 
 import board  # type: ignore
@@ -30,7 +31,11 @@ import busio  # type: ignore
 
 from feeph.ads1xxx import DOM, DRS, Ads1113, Ads1113Config
 
+LH = logging.getLogger("main")
+
 if __name__ == '__main__':
+    logging.basicConfig(format='%(levelname).1s: %(message)s', level=logging.INFO)
+
     i2c_bus = busio.I2C(scl=board.SCL, sda=board.SDA)
     ads1x13 = Ads1113(i2c_bus=i2c_bus)
 
@@ -38,6 +43,7 @@ if __name__ == '__main__':
     #  - enable continuous conversion mode
     #  - set desired data rate
     # on ADS1x14/ADS1x15: configure comparator (clat, cmod, cpol & cque)
+    LH.info("Configuring for continuous conversion mode.")
     my_config = Ads1113Config(dom=DOM.CCM, drs=DRS.MODE2)
 
     if ads1x13.configure(config=my_config):
@@ -45,7 +51,7 @@ if __name__ == '__main__':
             # on an ADS111x in MODE2 there should be a new sample
             # every 0.5 seconds (ADS101x is much faster)
             value = ads1x13.get_ccm_measurement()
-            print("value: {value1}µV")
+            print(f"value: {value}µV")
             time.sleep(0.5)
     else:
         print("Unable to configure ADC.")
