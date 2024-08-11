@@ -4,20 +4,20 @@ import unittest
 
 import feeph.ads1xxx as sut  # sytem under test
 from feeph.ads1xxx.conversions import UNIT
-from feeph.ads1xxx.settings import CLAT, CMOD, CPOL, CQUE, DOM, DRS, PGA, SSC
+from feeph.ads1xxx.settings import CLAT, CMOD, CPOL, CQUE, DOM, DRS, MUX, PGA, SSC
 
 
-class TestAds1114Config(unittest.TestCase):
+class TestAds1015Config(unittest.TestCase):
 
     def test_default_config(self):
         # -----------------------------------------------------------------
-        computed = sut.Ads1114Config().as_uint16()
+        computed = sut.Ads1015Config().as_uint16()
         expected = 0x0583
         # -----------------------------------------------------------------
         self.assertEqual(expected, computed)
 
     # ---------------------------------------------------------------------
-    # ADS1113, ADS1114 & ADS1115
+    # ADS1113, ADS1114 & ADS1015
     # ---------------------------------------------------------------------
 
     def test_single_shot_conversion(self):
@@ -26,7 +26,7 @@ class TestAds1114Config(unittest.TestCase):
             SSC.START: 0x8583,
         }
         for mode, config_uint16 in values.items():
-            computed = sut.Ads1115Config(ssc=mode).as_uint16()
+            computed = sut.Ads1015Config(ssc=mode).as_uint16()
             expected = config_uint16
             self.assertEqual(computed, expected)
 
@@ -36,7 +36,7 @@ class TestAds1114Config(unittest.TestCase):
             DOM.SSM: 0x0583,
         }
         for mode, config_uint16 in values.items():
-            computed = sut.Ads1115Config(dom=mode).as_uint16()
+            computed = sut.Ads1015Config(dom=mode).as_uint16()
             expected = config_uint16
             self.assertEqual(computed, expected)
 
@@ -52,12 +52,12 @@ class TestAds1114Config(unittest.TestCase):
             DRS.MODE7: 0x05E3,
         }
         for mode, config_uint16 in values.items():
-            computed = sut.Ads1115Config(drs=mode).as_uint16()
+            computed = sut.Ads1015Config(drs=mode).as_uint16()
             expected = config_uint16
             self.assertEqual(computed, expected)
 
     # ---------------------------------------------------------------------
-    # ADS1114 & ADS1115
+    # ADS1114 & ADS1015
     # ---------------------------------------------------------------------
 
     def test_programmable_gain_amplifier(self):
@@ -72,7 +72,7 @@ class TestAds1114Config(unittest.TestCase):
             PGA.MODE7: 0x0F83,
         }
         for mode, config_uint16 in values.items():
-            computed = sut.Ads1115Config(pga=mode).as_uint16()
+            computed = sut.Ads1015Config(pga=mode).as_uint16()
             expected = config_uint16
             self.assertEqual(computed, expected)
 
@@ -82,7 +82,7 @@ class TestAds1114Config(unittest.TestCase):
             CMOD.WND: 0x0593,
         }
         for mode, config_uint16 in values.items():
-            computed = sut.Ads1115Config(cmod=mode).as_uint16()
+            computed = sut.Ads1015Config(cmod=mode).as_uint16()
             expected = config_uint16
             self.assertEqual(computed, expected)
 
@@ -92,7 +92,7 @@ class TestAds1114Config(unittest.TestCase):
             CPOL.AHI: 0x058B,
         }
         for mode, config_uint16 in values.items():
-            computed = sut.Ads1115Config(cpol=mode).as_uint16()
+            computed = sut.Ads1015Config(cpol=mode).as_uint16()
             expected = config_uint16
             self.assertEqual(computed, expected)
 
@@ -102,7 +102,7 @@ class TestAds1114Config(unittest.TestCase):
             CLAT.LAT: 0x0587,
         }
         for mode, config_uint16 in values.items():
-            computed = sut.Ads1115Config(clat=mode).as_uint16()
+            computed = sut.Ads1015Config(clat=mode).as_uint16()
             expected = config_uint16
             self.assertEqual(computed, expected)
 
@@ -114,64 +114,84 @@ class TestAds1114Config(unittest.TestCase):
             CQUE.DIS: 0x0583,
         }
         for mode, config_uint16 in values.items():
-            computed = sut.Ads1115Config(cque=mode).as_uint16()
+            computed = sut.Ads1015Config(cque=mode).as_uint16()
             expected = config_uint16
             self.assertEqual(computed, expected)
 
     def test_get_atlo_as_steps(self):
-        computed = sut.Ads1114Config(atlo=0x9FFF).get_atlo(unit=UNIT.STEPS)
+        computed = sut.Ads1015Config(atlo=0x9FFF).get_atlo(unit=UNIT.STEPS)
         expected = 0x9FFF
         self.assertEqual(computed, expected)
 
     def test_get_atlo_as_microvolts(self):
-        computed = sut.Ads1114Config(atlo=0x9FFF).get_atlo(unit=UNIT.MICRO)
+        computed = sut.Ads1015Config(atlo=0x9FFF).get_atlo(unit=UNIT.MICRO)
         expected = -1536109
         self.assertEqual(computed, expected)
 
     def test_set_atlo_using_steps(self):
-        config = sut.Ads1114Config()
+        config = sut.Ads1015Config()
         config.set_atlo(0x9FFF, unit=UNIT.STEPS)
         computed = config.get_atlo()
         expected = -1536109
         self.assertEqual(computed, expected)
 
     def test_set_atlo_using_steps_oor(self):
-        computed = sut.Ads1114Config().set_atlo(0xFFFFFF, unit=UNIT.STEPS)
+        computed = sut.Ads1015Config().set_atlo(0xFFFFFF, unit=UNIT.STEPS)
         expected = False
         self.assertEqual(computed, expected)
 
     def test_set_atlo_using_microvolts(self):
-        config = sut.Ads1114Config()
+        config = sut.Ads1015Config()
         config.set_atlo(-1536109, unit=UNIT.MICRO)
         computed = config.get_atlo()
         expected = -1536109
         self.assertEqual(computed, expected)
 
     def test_get_athi_as_steps(self):
-        computed = sut.Ads1114Config(atlo=0x6000).get_atlo(unit=UNIT.STEPS)
+        computed = sut.Ads1015Config(atlo=0x6000).get_atlo(unit=UNIT.STEPS)
         expected = 0x6000
         self.assertEqual(computed, expected)
 
     def test_get_athi_as_microvolts(self):
-        computed = sut.Ads1114Config(atlo=0x6000).get_atlo(unit=UNIT.MICRO)
+        computed = sut.Ads1015Config(atlo=0x6000).get_atlo(unit=UNIT.MICRO)
         expected = 1536047
         self.assertEqual(computed, expected)
 
     def test_set_athi_using_steps(self):
-        config = sut.Ads1114Config()
+        config = sut.Ads1015Config()
         config.set_athi(0x6000, unit=UNIT.STEPS)
         computed = config.get_athi()
         expected = 1536047
         self.assertEqual(computed, expected)
 
     def test_set_athi_using_steps_oor(self):
-        computed = sut.Ads1114Config().set_athi(0xFFFFFF, unit=UNIT.STEPS)
+        computed = sut.Ads1015Config().set_athi(0xFFFFFF, unit=UNIT.STEPS)
         expected = False
         self.assertEqual(computed, expected)
 
     def test_set_athi_using_microvolts(self):
-        config = sut.Ads1114Config()
+        config = sut.Ads1015Config()
         config.set_athi(1536047, unit=UNIT.MICRO)
         computed = config.get_athi()
         expected = 1536047
         self.assertEqual(computed, expected)
+
+    # ---------------------------------------------------------------------
+    # ADS1015
+    # ---------------------------------------------------------------------
+
+    def test_input_multiplexer(self):
+        values = {
+            MUX.MODE0: 0x0583,
+            MUX.MODE1: 0x1583,
+            MUX.MODE2: 0x2583,
+            MUX.MODE3: 0x3583,
+            MUX.MODE4: 0x4583,
+            MUX.MODE5: 0x5583,
+            MUX.MODE6: 0x6583,
+            MUX.MODE7: 0x7583,
+        }
+        for mode, config_uint16 in values.items():
+            computed = sut.Ads1015Config(mux=mode).as_uint16()
+            expected = config_uint16
+            self.assertEqual(computed, expected)

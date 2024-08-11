@@ -35,4 +35,4 @@ if __name__ == '__main__':
     ads1115.reset_device_registers()
 
     # take a single-shot measurement
-    LH.info("measurement: %0.6fV", ads1115.get_singleshot_measurement() / (1000 * 1000))
+    LH.info("measurement: %0.6fV", ads1115.get_ssc_measurement() / (1000 * 1000))

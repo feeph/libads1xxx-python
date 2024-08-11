@@ -7,17 +7,17 @@ from feeph.ads1xxx.conversions import UNIT
 from feeph.ads1xxx.settings import CLAT, CMOD, CPOL, CQUE, DOM, DRS, PGA, SSC
 
 
-class TestAds1114Config(unittest.TestCase):
+class TestAds1014Config(unittest.TestCase):
 
     def test_default_config(self):
         # -----------------------------------------------------------------
-        computed = sut.Ads1114Config().as_uint16()
+        computed = sut.Ads1014Config().as_uint16()
         expected = 0x0583
         # -----------------------------------------------------------------
         self.assertEqual(expected, computed)
 
     # ---------------------------------------------------------------------
-    # ADS1113, ADS1114 & ADS1115
+    # ADS1113, ADS1014 & ADS1115
     # ---------------------------------------------------------------------
 
     def test_single_shot_conversion(self):
@@ -57,7 +57,7 @@ class TestAds1114Config(unittest.TestCase):
             self.assertEqual(computed, expected)
 
     # ---------------------------------------------------------------------
-    # ADS1114 & ADS1115
+    # ADS1014 & ADS1115
     # ---------------------------------------------------------------------
 
     def test_programmable_gain_amplifier(self):
@@ -119,58 +119,58 @@ class TestAds1114Config(unittest.TestCase):
             self.assertEqual(computed, expected)
 
     def test_get_atlo_as_steps(self):
-        computed = sut.Ads1114Config(atlo=0x9FFF).get_atlo(unit=UNIT.STEPS)
+        computed = sut.Ads1014Config(atlo=0x9FFF).get_atlo(unit=UNIT.STEPS)
         expected = 0x9FFF
         self.assertEqual(computed, expected)
 
     def test_get_atlo_as_microvolts(self):
-        computed = sut.Ads1114Config(atlo=0x9FFF).get_atlo(unit=UNIT.MICRO)
+        computed = sut.Ads1014Config(atlo=0x9FFF).get_atlo(unit=UNIT.MICRO)
         expected = -1536109
         self.assertEqual(computed, expected)
 
     def test_set_atlo_using_steps(self):
-        config = sut.Ads1114Config()
+        config = sut.Ads1014Config()
         config.set_atlo(0x9FFF, unit=UNIT.STEPS)
         computed = config.get_atlo()
         expected = -1536109
         self.assertEqual(computed, expected)
 
     def test_set_atlo_using_steps_oor(self):
-        computed = sut.Ads1114Config().set_atlo(0xFFFFFF, unit=UNIT.STEPS)
+        computed = sut.Ads1014Config().set_atlo(0xFFFFFF, unit=UNIT.STEPS)
         expected = False
         self.assertEqual(computed, expected)
 
     def test_set_atlo_using_microvolts(self):
-        config = sut.Ads1114Config()
+        config = sut.Ads1014Config()
         config.set_atlo(-1536109, unit=UNIT.MICRO)
         computed = config.get_atlo()
         expected = -1536109
         self.assertEqual(computed, expected)
 
     def test_get_athi_as_steps(self):
-        computed = sut.Ads1114Config(atlo=0x6000).get_atlo(unit=UNIT.STEPS)
+        computed = sut.Ads1014Config(atlo=0x6000).get_atlo(unit=UNIT.STEPS)
         expected = 0x6000
         self.assertEqual(computed, expected)
 
     def test_get_athi_as_microvolts(self):
-        computed = sut.Ads1114Config(atlo=0x6000).get_atlo(unit=UNIT.MICRO)
+        computed = sut.Ads1014Config(atlo=0x6000).get_atlo(unit=UNIT.MICRO)
         expected = 1536047
         self.assertEqual(computed, expected)
 
     def test_set_athi_using_steps(self):
-        config = sut.Ads1114Config()
+        config = sut.Ads1014Config()
         config.set_athi(0x6000, unit=UNIT.STEPS)
         computed = config.get_athi()
         expected = 1536047
         self.assertEqual(computed, expected)
 
     def test_set_athi_using_steps_oor(self):
-        computed = sut.Ads1114Config().set_athi(0xFFFFFF, unit=UNIT.STEPS)
+        computed = sut.Ads1014Config().set_athi(0xFFFFFF, unit=UNIT.STEPS)
         expected = False
         self.assertEqual(computed, expected)
 
     def test_set_athi_using_microvolts(self):
-        config = sut.Ads1114Config()
+        config = sut.Ads1014Config()
         config.set_athi(1536047, unit=UNIT.MICRO)
         computed = config.get_athi()
         expected = 1536047
