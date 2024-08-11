@@ -23,6 +23,8 @@ if [[ -n $FILES ]] ; then
     pdm run mypy $FILES
 fi
 
+pdm run pytest --cov=feeph.ads1xxx --cov-report=term-missing tests/
+
 echo "----------------------------------------------------------------------"
 echo "If you reached this far you passed. Congratulations!"
 echo "----------------------------------------------------------------------"
